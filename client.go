@@ -46,15 +46,15 @@ import (
 	"time"
 
 	"github.com/comail/colog"
-	htgotts "github.com/talkkonnect/htgo-tts"
+	htgotts "github.com/HVelosoETI/htgo-tts"
 	"github.com/kennygrant/sanitize"
-	hd44780 "github.com/talkkonnect/go-hd44780"
-	"github.com/talkkonnect/gpio"
-	"github.com/talkkonnect/gumble/gumble"
-	"github.com/talkkonnect/gumble/gumbleutil"
-	_ "github.com/talkkonnect/gumble/opus"
-	term "github.com/talkkonnect/termbox-go"
-	"github.com/talkkonnect/volume-go"
+	hd44780 "github.com/HVelosoETI/go-hd44780"
+	"github.com/HVelosoETI/gpio"
+	"github.com/HVelosoETI/gumble/gumble"
+	"github.com/HVelosoETI/gumble/gumbleutil"
+	_ "github.com/HVelosoETI/gumble/opus"
+	term "github.com/HVelosoETI/termbox-go"
+	"github.com/HVelosoETI/volume-go"
 	"go.bug.st/serial.v1" //Importa Serial
 )
 
