@@ -351,7 +351,17 @@ var (
 	AudioRecordChunkSize   string // New. Size of audio file chunks in seconds.
 )
 
-//
+//serial usage variables
+var (
+	Serialcommenable	bool
+	Serialport			string
+	Serialpttmode		string
+	Pttdefault			bool
+	Sqldefault			bool
+	Dsrdefault			bool
+	Dsralarmenable		bool
+	Dtrreference		bool
+)
 
 //other global variables used for state tracking
 var (
@@ -600,6 +610,7 @@ type Hardware struct {
 	GPS                 GPS                 `xml:"gps"`
 	PanicFunction       PanicFunction       `xml:"panicfunction"`
 	AudioRecordFunction AudioRecordFunction `xml:"audiorecordfunction"` //New
+	Serialcomm			Serialcomm			`xml:"serialcomm"`
 }
 
 type Lights struct {
@@ -714,6 +725,17 @@ type AudioRecordFunction struct {
 	AudioRecordProfile     string   `xml:"recordprofile"`       // New
 	AudioRecordFileFormat  string   `xml:"recordfileformat"`    // New
 	AudioRecordChunkSize   string   `xml:"recordchunksize"`     // New
+}
+
+type Serialcomm struct {
+	Serialcommenable	bool	`xml:"serialcommenable"`
+	Serialport			string	`xml:"serialport"`
+	Serialpttmode		string	`xml:"serialpttmode"`
+	Pttdefault			bool	`xml:"pttdefault"`
+	Sqldefault			bool	`xml:"sqldefault"`
+	Dsrdefault			bool	`xml:"dsrdefault"`
+	Dsralarmenable		bool	`xml:"dsralarmenable"`
+	Dtrreference		bool	`xml:"dtrreference"`
 }
 
 func readxmlconfig(file string) error {
@@ -1297,6 +1319,16 @@ func readxmlconfig(file string) error {
 	AudioRecordFileFormat = document.Global.Hardware.AudioRecordFunction.AudioRecordFileFormat   // New
 	AudioRecordChunkSize = document.Global.Hardware.AudioRecordFunction.AudioRecordChunkSize     // New
 
+	Serialcommenable = document.Global.Hardware.SerialComm.Serialcommenable
+	Serialport = document.Global.Hardware.Serialcomm.Serialport
+	Serialpttmode = document.Global.Hardware.SerialComm.Serialpttmode
+	Pttdefault = document.Global.Hardware.SerialComm.Pttdefault
+	Sqldefault = document.Global.Hardware.SerialComm.Sqldefault
+	Dsrdefault = document.Global.Hardware.SerialComm.Dsrdefault
+	Dsralarmenable = document.Global.Hardware.SerialComm.Dsralarmenable
+	Dtrreference = document.Global.Hardware.SerialComm.Dtrreference
+
+
 	log.Println("Successfully loaded configuration file into memory")
 	return nil
 }
@@ -1610,4 +1642,14 @@ func printxmlconfig() {
 	} else {
 		log.Println("info: ------------ AUDIO RECORDING Function ------- SKIPPED ")
 	}
+	log.Println("info: ------------ SERIAL COMM Function -------------- ")
+	log.Println("info: Serial Port enabled " + fmt.Sprintf("%v", Serialcommenable))          // New
+	log.Println("info: Serial Port " + fmt.Sprintf("%v", Serialport))          // New
+	log.Println("info: Serial PTT Mode " + fmt.Sprintf("%v", Serialpttmode))         // New
+	log.Println("info: Default no PTT Signal OUT " + fmt.Sprintf("%v", Pttdefault))                   // New
+	log.Println("info: Default no SQL Signal INPUT " + fmt.Sprintf("%v", Sqldefault))             // New
+	log.Println("info: Default no DSR INPUT " + fmt.Sprintf("%v", Dsrdefault))      // New
+	log.Println("info: DSR Alarm Input enabled " + fmt.Sprintf("%v", Dsralarmenable))    
+	log.Println("info: DTR Reference state output " + fmt.Sprintf("%v", Dtrreference))    
+
 }

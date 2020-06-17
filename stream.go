@@ -62,6 +62,7 @@ type Stream struct {
 
 	deviceSink  *openal.Device
 	contextSink *openal.Context
+	B			*Talkkonnect
 }
 
 func New(client *gumble.Client) (*Stream, error) {
@@ -154,6 +155,11 @@ func (s *Stream) OnAudioStream(e *gumble.AudioStreamEvent) {
 			LEDOffFunc(BackLightLED)
 		}
 	}
+	if TargetBoard == "pc" {
+		if s.B.Serialcommenable {
+			s.B.pttDOWN()
+		}
+	}
 
 	timertalkled := time.NewTimer(time.Millisecond * 200)
 
@@ -164,6 +170,11 @@ func (s *Stream) OnAudioStream(e *gumble.AudioStreamEvent) {
 			<-timertalkled.C
 			if TargetBoard == "rpi" {
 				LEDOffFunc(VoiceActivityLED)
+			}
+			if TargetBoard == "pc" {
+				if s.B.Serialcommenable {
+					s.B.pttDOWN()
+				}
 			}
 			lastspeaker = "Nil"
 		}
@@ -193,6 +204,11 @@ func (s *Stream) OnAudioStream(e *gumble.AudioStreamEvent) {
 				LEDOnFunc(VoiceActivityLED)
 				if LCDEnabled == true {
 					LEDOnFunc(BackLightLED)
+				}
+			}
+			if TargetBoard == "pc" {
+				if s.B.Serialcommenable {
+					s.B.pttUP()
 				}
 			}
 

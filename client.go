@@ -23,7 +23,7 @@
  *
  * My Blog is at www.talkkonnect.com
  * The source code is hosted at github.com/talkkonnect
- *
+ * JUN172020 HVelosoETi Henrick Veloso, serial ptt and sql 
  *
  */
 
@@ -55,6 +55,7 @@ import (
 	_ "github.com/talkkonnect/gumble/opus"
 	term "github.com/talkkonnect/termbox-go"
 	"github.com/talkkonnect/volume-go"
+	"go.bug.st/serial.v1" //Importa Serial
 )
 
 var (
@@ -123,6 +124,20 @@ type Talkkonnect struct {
 	CommentButtonState uint
 	ChimesButton       gpio.Pin
 	ChimesButtonState  uint
+
+	//Variaveis para serial
+	Serialcommenable	bool
+	Serialport			string
+	Serialpttmode		string
+	Pttdefault			bool //pino RTS da serial
+	Sqldefault			bool //pino CTS da serial
+	Dsrdefault			bool //referencia para alarme
+	Dsralarmenable		bool
+	Dtrreference		bool
+
+	port				serial.Port
+	err					error
+
 }
 
 // new configurable functionality not yet moved to XML
@@ -170,6 +185,14 @@ func PreInit0(file string) {
 		ChannelName: Channel[AccountIndex],
 		Logging:     Logging,
 		Daemonize:   Daemonize,
+		Serialcommenable:	Serialcommenable,
+		Serialport:			Serialport,
+		Serialpttmode:		Serialpttmode,
+		Pttdefault:			Pttdefault,
+		Sqldefault:			Sqldefault,
+		Dsrdefault:			Dsrdefault,
+		Dsralarmenable:		Dsralarmenable,
+		Dtrreference:		Dtrreference,
 	}
 
 	b.PreInit1(false)
@@ -238,6 +261,18 @@ func (b *Talkkonnect) Init() {
 	if TargetBoard == "rpi" {
 		b.LEDOffAll()
 	}
+	if TargetBoard == "pc" {
+		if Serialcommenable {
+			mode := &serial.Mode{
+				BaudRate: 9600,
+				Parity:   serial.NoParity,
+				DataBits: 8,
+				StopBits: serial.OneStopBit,
+			}
+			b.port, b.err = serial.Open(b.Serialport, mode)
+			SerialStateInit()
+		}
+	}
 
 	if b.Logging == "screen" {
 		colog.Register()
@@ -262,6 +297,7 @@ func (b *Talkkonnect) Init() {
 	} else {
 		log.Println("info: Target Board Set as PC (gpio disabled) ")
 	}
+	//Iniciar Porta serial
 
 	talkkonnectBanner()
 
@@ -361,7 +397,41 @@ func (b *Talkkonnect) Init() {
 
 		}
 	}
-
+//Listener para Serial CTS
+if b.Serialcommenable {
+	go func() {
+		for {
+			if b.IsConnected {				
+				time.Sleep(200 * time.Millisecond)
+				modemStatus, err := b.port.GetModemStatusBits();
+					if b.Stream != nil {
+						if modemStatus.DSR == b.Sqldefault {
+							if isTx {
+								isTx = false
+								b.TransmitStop(true)
+								time.Sleep(750 * time.Millisecond)
+								if TxCounter {
+									txcounter++
+									log.Println("info: Tx Button Count ", txcounter, err)
+								}
+							}
+						} else {
+							log.Println("info: Tx Button is pressed", err)
+							if !isTx {
+								isTx = true
+								b.TransmitStart()
+								time.Sleep(750 * time.Millisecond)
+							}
+						}
+					}
+				//}
+			} else {
+				ConnectErrorMessage()
+				time.Sleep(2 * time.Second)
+			}
+		}
+	}()
+}
 keyPressListenerLoop:
 	for {
 		switch ev := term.PollEvent(); ev.Type {
@@ -446,6 +516,31 @@ keyPressListenerLoop:
 
 	}
 
+}
+//Funções de acionamento do PTT
+func (b *Talkkonnect) SerialStateInit() {
+	err := b.port.SetRTS(b.Pttdefault)
+	if err != nil {
+				log.Fatal(err)
+			}
+	err := b.port.SetDTR(b.Dtrreference)
+	if err != nil {
+				log.Fatal(err)
+			}
+}
+func (b *Talkkonnect) pttUP() {
+	err := b.port.SetRTS(!b.Pttdefault)
+	if err != nil {
+				log.Fatal(err)
+			}
+			
+}
+func (b *Talkkonnect) pttDOWN() {
+	err := b.port.SetRTS(b.Pttdefault)
+	if err != nil {
+				log.Fatal(err)
+			}
+		
 }
 
 func (b *Talkkonnect) CleanUp() {
@@ -552,6 +647,7 @@ func (b *Talkkonnect) OpenStream() {
 	} else {
 
 		b.Stream = stream
+		b.Stream.B = b
 
 	}
 }
