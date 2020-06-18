@@ -39,7 +39,7 @@ import (
 
 func main() {
 
-	config := flag.String("config", "/home/talkkonnect/gocode/src/github.com/talkkonnect/talkkonnect/talkkonnect.xml", "full path to talkkonnect.xml configuration file")
+	config := flag.String("config", "/etc/talkkonnect/talkkonnect.xml", "full path to talkkonnect.xml configuration file")
 
 	flag.Usage = talkkonnectusage
 	flag.Parse()

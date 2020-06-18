@@ -49,9 +49,9 @@ import (
 	htgotts "github.com/HVelosoETI/htgo-tts"
 	"github.com/kennygrant/sanitize"
 	hd44780 "github.com/HVelosoETI/go-hd44780"
-	"github.com/HVelosoETI/gpio"
-	"github.com/HVelosoETI/gumble/gumble"
-	"github.com/HVelosoETI/gumble/gumbleutil"
+	"github.com/talkkonnect/gpio"
+	"github.com/talkkonnect/gumble/gumble"
+	"github.com/talkkonnect/gumble/gumbleutil"
 	_ "github.com/HVelosoETI/gumble/opus"
 	term "github.com/HVelosoETI/termbox-go"
 	"github.com/HVelosoETI/volume-go"
@@ -151,6 +151,31 @@ type ChannelsListStruct struct {
 
 func reset() {
 	term.Sync()
+}
+//Funções de acionamento do PTT
+func (b *Talkkonnect) SerialStateInit() {
+	err := b.port.SetRTS(b.Pttdefault)
+	if err != nil {
+				log.Fatal(err)
+			}
+	err = b.port.SetDTR(b.Dtrreference)
+	if err != nil {
+				log.Fatal(err)
+			}
+}
+func (b *Talkkonnect) pttUP() {
+	err := b.port.SetRTS(!b.Pttdefault)
+	if err != nil {
+				log.Fatal(err)
+			}
+			
+}
+func (b *Talkkonnect) pttDOWN() {
+	err := b.port.SetRTS(b.Pttdefault)
+	if err != nil {
+				log.Fatal(err)
+			}
+		
 }
 
 func PreInit0(file string) {
@@ -270,7 +295,7 @@ func (b *Talkkonnect) Init() {
 				StopBits: serial.OneStopBit,
 			}
 			b.port, b.err = serial.Open(b.Serialport, mode)
-			SerialStateInit()
+			b.SerialStateInit()
 		}
 	}
 
@@ -405,18 +430,18 @@ if b.Serialcommenable {
 				time.Sleep(200 * time.Millisecond)
 				modemStatus, err := b.port.GetModemStatusBits();
 					if b.Stream != nil {
-						if modemStatus.DSR == b.Sqldefault {
+						if modemStatus.CTS == b.Sqldefault {
 							if isTx {
 								isTx = false
 								b.TransmitStop(true)
 								time.Sleep(750 * time.Millisecond)
 								if TxCounter {
 									txcounter++
-									log.Println("info: Tx Button Count ", txcounter, err)
+//									log.Println("info: Tx Button Count ", txcounter, err)
 								}
 							}
 						} else {
-							log.Println("info: Tx Button is pressed", err)
+//							log.Println("info: Tx Button is pressed", err)
 							if !isTx {
 								isTx = true
 								b.TransmitStart()
@@ -516,31 +541,6 @@ keyPressListenerLoop:
 
 	}
 
-}
-//Funções de acionamento do PTT
-func (b *Talkkonnect) SerialStateInit() {
-	err := b.port.SetRTS(b.Pttdefault)
-	if err != nil {
-				log.Fatal(err)
-			}
-	err := b.port.SetDTR(b.Dtrreference)
-	if err != nil {
-				log.Fatal(err)
-			}
-}
-func (b *Talkkonnect) pttUP() {
-	err := b.port.SetRTS(!b.Pttdefault)
-	if err != nil {
-				log.Fatal(err)
-			}
-			
-}
-func (b *Talkkonnect) pttDOWN() {
-	err := b.port.SetRTS(b.Pttdefault)
-	if err != nil {
-				log.Fatal(err)
-			}
-		
 }
 
 func (b *Talkkonnect) CleanUp() {
