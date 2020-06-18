@@ -1319,14 +1319,14 @@ func readxmlconfig(file string) error {
 	AudioRecordFileFormat = document.Global.Hardware.AudioRecordFunction.AudioRecordFileFormat   // New
 	AudioRecordChunkSize = document.Global.Hardware.AudioRecordFunction.AudioRecordChunkSize     // New
 
-	Serialcommenable = document.Global.Hardware.SerialComm.Serialcommenable
+	Serialcommenable = document.Global.Hardware.Serialcomm.Serialcommenable
 	Serialport = document.Global.Hardware.Serialcomm.Serialport
-	Serialpttmode = document.Global.Hardware.SerialComm.Serialpttmode
-	Pttdefault = document.Global.Hardware.SerialComm.Pttdefault
-	Sqldefault = document.Global.Hardware.SerialComm.Sqldefault
-	Dsrdefault = document.Global.Hardware.SerialComm.Dsrdefault
-	Dsralarmenable = document.Global.Hardware.SerialComm.Dsralarmenable
-	Dtrreference = document.Global.Hardware.SerialComm.Dtrreference
+	Serialpttmode = document.Global.Hardware.Serialcomm.Serialpttmode
+	Pttdefault = document.Global.Hardware.Serialcomm.Pttdefault
+	Sqldefault = document.Global.Hardware.Serialcomm.Sqldefault
+	Dsrdefault = document.Global.Hardware.Serialcomm.Dsrdefault
+	Dsralarmenable = document.Global.Hardware.Serialcomm.Dsralarmenable
+	Dtrreference = document.Global.Hardware.Serialcomm.Dtrreference
 
 
 	log.Println("Successfully loaded configuration file into memory")
