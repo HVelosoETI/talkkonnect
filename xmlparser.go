@@ -730,7 +730,8 @@ type AudioRecordFunction struct {
 }
 
 type Serialcomm struct {
-	Serialcommenable	bool	`xml:"serialcommenable"`
+	XMLName				xml.Name `xml:"serialcomm"`
+	Serialcommenable	bool	`xml:"enabled,attr"`
 	Serialport			string	`xml:"serialport"`
 	Serialpttmode		string	`xml:"serialpttmode"`
 	Pttdefault			bool	`xml:"pttdefault"`
@@ -1355,7 +1356,7 @@ func printxmlconfig() {
 	if PrintLogging {
 		log.Println("info: -------- Logging & Daemonizing -------- ")
 		log.Println("info: Output Device     " + OutputDevice)
-		log.Println("info: Default Output Volume     " + DefaultOptVolume)
+		log.Println("info: Default Output Volume (%) " + fmt.Sprintf("%d", DefaultOptVolume))
 		log.Println("info: Log File          " + LogFilenameAndPath)
 		log.Println("info: Logging           " + Logging)
 		log.Println("info: Daemonize         " + fmt.Sprintf("%t", Daemonize))

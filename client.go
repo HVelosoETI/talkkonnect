@@ -327,7 +327,7 @@ func (b *Talkkonnect) Init() {
 	talkkonnectBanner()
 
 	err = volume.Unmute(OutputDevice)
-	err = volume.setVolumeCmd(DefaultOptVolume,OutputDevice)
+	err = volume.SetVolume(DefaultOptVolume,OutputDevice)
 	if err != nil {
 		log.Println("warn: Unable to Unmute ", err)
 	} else {
@@ -430,6 +430,9 @@ if b.Serialcommenable {
 			if b.IsConnected {				
 				time.Sleep(200 * time.Millisecond)
 				modemStatus, err := b.port.GetModemStatusBits();
+				if err != nil {
+					err = nil
+				}
 					if b.Stream != nil {
 						if modemStatus.CTS == b.Sqldefault {
 							if isTx {

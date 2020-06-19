@@ -9,13 +9,13 @@
   <!-- This example connects to our community server, after you install talkkonnect chat with us here! -->
   <accounts>
     <account name="PMMG-11RPM" default="true">   <!-- Server identifier and enabler -->
-      <serverandport>10.14.76.17:64738</serverandport> <!-- server:port of mumble server to connect to -->
-      <username>rpt</username> <!-- Mumble Username that will be used to authenticate on the mumble server -->
-      <password>rpt</password> <!-- Mumble Password that will be used along with the username to authenticate on the mumble server -->
+      <serverandport>serverAddress:64738</serverandport> <!-- server:port of mumble server to connect to -->
+      <username>username</username> <!-- Mumble Username that will be used to authenticate on the mumble server -->
+      <password>password</password> <!-- Mumble Password that will be used along with the username to authenticate on the mumble server -->
       <insecure>true</insecure>   <!-- Set to true of your server doesnt require a certificate-->
       <certificate></certificate> <!-- Full Path to Certificate if Certificate is needed by Server -->
       <channel></channel>   <!-- Initial Channel on The Server to Move to after successful connection -->
-      <ident>Repetidor Salinas</ident>             <!-- The identity to be sent in a panic situation -->
+      <ident>Identity</ident>             <!-- The identity to be sent in a panic situation -->
     </account>
   </accounts>
 
@@ -25,7 +25,7 @@
     <software> <!-- Section for Setting the behaviour of talkkonnect software for logging and daemonization -->
       <settings>
         <outputdevice>PCM</outputdevice> <!-- Set Output Device to Speaker, Master, Headphone or whatever your OS/Alsa Detects as the Master Sound Card Device for Output in alsamixer -->
-        <defaultoutputvolume>160</defaultoutputvolume>
+        <defaultoptvolume>160</defaultoptvolume>
         <logfilenameandpath>/var/log/talkkonnect.log</logfilenameandpath> <!-- full path to writeable log file -->
         <logging></logging>    <!--set logging to screen if screen only desired otherwise leave it as blank and talkkonnect will log to both screen and logfile -->
         <daemonize>false</daemonize> <!-- this feature is not implemented yet -->
