@@ -71,6 +71,7 @@ var (
 //software settings
 var (
 	OutputDevice       string
+	DefaultOptVolume   int
 	LogFilenameAndPath string
 	Logging            string
 	Daemonize          bool
@@ -418,6 +419,7 @@ type Software struct {
 type Settings struct {
 	XMLName            xml.Name `xml:"settings"`
 	OutputDevice       string   `xml:"outputdevice"`
+	DefaultOptVolume   int		`xml:"defaultoptvolume"`
 	LogFilenameAndPath string   `xml:"logfilenameandpath"`
 	Logging            string   `xml:"logging"`
 	Daemonize          bool     `xml:"daemonize"`
@@ -840,6 +842,7 @@ func readxmlconfig(file string) error {
 	}
 
 	OutputDevice = document.Global.Software.Settings.OutputDevice
+	DefaultOptVolume = document.Global.Software.Settings.DefaultOptVolume
 	LogFilenameAndPath = document.Global.Software.Settings.LogFilenameAndPath
 	Logging = document.Global.Software.Settings.Logging
 
@@ -1352,6 +1355,7 @@ func printxmlconfig() {
 	if PrintLogging {
 		log.Println("info: -------- Logging & Daemonizing -------- ")
 		log.Println("info: Output Device     " + OutputDevice)
+		log.Println("info: Default Output Volume     " + DefaultOptVolume)
 		log.Println("info: Log File          " + LogFilenameAndPath)
 		log.Println("info: Logging           " + Logging)
 		log.Println("info: Daemonize         " + fmt.Sprintf("%t", Daemonize))
@@ -1641,15 +1645,16 @@ func printxmlconfig() {
 		log.Println("info: Audio Recording Chunk Size " + fmt.Sprintf("%v", AudioRecordChunkSize))     // New
 	} else {
 		log.Println("info: ------------ AUDIO RECORDING Function ------- SKIPPED ")
+		}
+	if Serialcommenable {
+		log.Println("info: ------------ SERIAL COMM Function -------------- ")
+		log.Println("info: Serial Port enabled " + fmt.Sprintf("%v", Serialcommenable))          // New
+		log.Println("info: Serial Port " + fmt.Sprintf("%v", Serialport))          // New
+		log.Println("info: Serial PTT Mode " + fmt.Sprintf("%v", Serialpttmode))         // New
+		log.Println("info: Default no PTT Signal OUT " + fmt.Sprintf("%v", Pttdefault))                   // New
+		log.Println("info: Default no SQL Signal INPUT " + fmt.Sprintf("%v", Sqldefault))             // New
+		log.Println("info: Default no DSR INPUT " + fmt.Sprintf("%v", Dsrdefault))      // New
+		log.Println("info: DSR Alarm Input enabled " + fmt.Sprintf("%v", Dsralarmenable))    
+		log.Println("info: DTR Reference state output " + fmt.Sprintf("%v", Dtrreference))    
 	}
-	log.Println("info: ------------ SERIAL COMM Function -------------- ")
-	log.Println("info: Serial Port enabled " + fmt.Sprintf("%v", Serialcommenable))          // New
-	log.Println("info: Serial Port " + fmt.Sprintf("%v", Serialport))          // New
-	log.Println("info: Serial PTT Mode " + fmt.Sprintf("%v", Serialpttmode))         // New
-	log.Println("info: Default no PTT Signal OUT " + fmt.Sprintf("%v", Pttdefault))                   // New
-	log.Println("info: Default no SQL Signal INPUT " + fmt.Sprintf("%v", Sqldefault))             // New
-	log.Println("info: Default no DSR INPUT " + fmt.Sprintf("%v", Dsrdefault))      // New
-	log.Println("info: DSR Alarm Input enabled " + fmt.Sprintf("%v", Dsralarmenable))    
-	log.Println("info: DTR Reference state output " + fmt.Sprintf("%v", Dtrreference))    
-
 }

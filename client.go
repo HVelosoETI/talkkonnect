@@ -327,6 +327,7 @@ func (b *Talkkonnect) Init() {
 	talkkonnectBanner()
 
 	err = volume.Unmute(OutputDevice)
+	err = volume.setVolumeCmd(DefaultOptVolume,OutputDevice)
 	if err != nil {
 		log.Println("warn: Unable to Unmute ", err)
 	} else {

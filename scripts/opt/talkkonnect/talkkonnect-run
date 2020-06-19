@@ -1,0 +1,10 @@
+#!/bin/bash
+#killall -vs 9 talkkonnect
+sleep 1
+reset
+sleep2
+pactl set-sink-volume alsa_output.pci-0000_00_14.2.analog-stereo 170%
+
+pactl set-source-volume alsa_input.pci-0000_00_14.2.analog-stereo 60%
+
+/opt/talkkonnect/talkkonnect

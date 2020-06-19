@@ -25,9 +25,8 @@
     <software> <!-- Section for Setting the behaviour of talkkonnect software for logging and daemonization -->
       <settings>
         <outputdevice>PCM</outputdevice> <!-- Set Output Device to Speaker, Master, Headphone or whatever your OS/Alsa Detects as the Master Sound Card Device for Output in alsamixer -->
-        <defaultoutputvolume>160</defaultoutputvolume>
         <logfilenameandpath>/var/log/talkkonnect.log</logfilenameandpath> <!-- full path to writeable log file -->
-        <logging></logging>    <!--set logging to screen if screen only desired otherwise leave it as blank and talkkonnect will log to both screen and logfile -->
+        <logging>screen</logging>    <!--set logging to screen if screen only desired otherwise leave it as blank and talkkonnect will log to both screen and logfile -->
         <daemonize>false</daemonize> <!-- this feature is not implemented yet -->
         <cancellablestream>true</cancellablestream> <!-- Set to true if you allow others to stop your streaming upon keying up -->
 	<simplexwithmute>true</simplexwithmute>
