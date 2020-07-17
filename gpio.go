@@ -30,12 +30,11 @@
 package talkkonnect
 
 import (
-	"github.com/stianeikeland/go-rpio"
-	"github.com/talkkonnect/gpio"
 	"log"
 	"os"
 	"os/exec"
 	"time"
+	go-rpio "github.com/warthog618/gpio"
 	hd44780 "github.com/talkkonnect/go-hd44780"
 )
 
